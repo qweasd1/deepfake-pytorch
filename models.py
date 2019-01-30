@@ -2,10 +2,11 @@ import torch
 import torch.utils.data
 from torch import nn, optim
 from padding_same_conv import Conv2d
+from conv2d import conv2d
 
 
 def toTensor(img):
-    img = torch.from_numpy(img.transpose((0, 3, 1, 2)))
+    img = torch.from_numpy(img.transpose((0, 3, 1, 2)).astype("float32"))
     return img
 
 
@@ -63,10 +64,10 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
 
         self.encoder = nn.Sequential(
-            _ConvLayer(3, 128),
-            _ConvLayer(128, 256),
-            _ConvLayer(256, 512),
-            _ConvLayer(512, 1024),
+            _ConvLayer(3, 128), # 32
+            _ConvLayer(128, 256), # 16
+            _ConvLayer(256, 512), # 8
+            _ConvLayer(512, 1024), #4
             Flatten(),
             nn.Linear(1024 * 4 * 4, 1024),
             nn.Linear(1024, 1024 * 4 * 4),

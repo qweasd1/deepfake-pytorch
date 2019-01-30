@@ -61,7 +61,7 @@ if os.path.isdir('checkpoint'):
         model.load_state_dict(checkpoint['state'])
         start_epoch = checkpoint['epoch']
         print('===> Load last checkpoint data')
-    except FileNotFoundError:
+    except:
         print('Can\'t found autoencoder.t7')
 else:
     start_epoch = 0
@@ -116,10 +116,10 @@ if __name__ == "__main__":
 
         if epoch % args.log_interval == 0:
 
-            test_A_ = target_A[0:14]
-            test_B_ = target_B[0:14]
-            test_A = var_to_np(target_A[0:14])
-            test_B = var_to_np(target_B[0:14])
+            test_A_ = target_A[0:6]
+            test_B_ = target_B[0:6]
+            test_A = var_to_np(target_A[0:6])
+            test_B = var_to_np(target_B[0:6])
             print('===> Saving models...')
             state = {
                 'state': model.state_dict(),
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
         figure = np.concatenate([figure_A, figure_B], axis=0)
         figure = figure.transpose((0, 1, 3, 4, 2))
-        figure = figure.reshape((4, 7) + figure.shape[1:])
+        figure = figure.reshape((4, 3) + figure.shape[1:])
         figure = stack_images(figure)
 
         figure = np.clip(figure * 255, 0, 255).astype('uint8')
