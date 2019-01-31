@@ -28,7 +28,7 @@ class _UpScale(nn.Sequential):
         self.add_module('conv2_', Conv2d(input_features, output_features * 4,
                                          kernel_size=3))
         self.add_module('leakyrelu', nn.LeakyReLU(0.1, inplace=True))
-        self.add_module('pixelshuffler', _PixelShuffler())
+        self.add_module('pixelshuffler', nn.PixelShuffle(2))
 
 
 class Flatten(nn.Module):
@@ -64,14 +64,14 @@ class Autoencoder(nn.Module):
         super(Autoencoder, self).__init__()
 
         self.encoder = nn.Sequential(
-            _ConvLayer(3, 128), # 32
-            _ConvLayer(128, 256), # 16
-            _ConvLayer(256, 512), # 8
-            _ConvLayer(512, 1024), #4
-            Flatten(),
-            nn.Linear(1024 * 4 * 4, 1024),
-            nn.Linear(1024, 1024 * 4 * 4),
-            Reshape(),
+            conv2d(3, 128), # 32
+            conv2d(128, 256), # 16
+            conv2d(256, 512), # 8
+            conv2d(512, 1024), #4
+            # Flatten(),
+            # nn.Linear(1024 * 4 * 4, 1024),
+            # nn.Linear(1024, 1024 * 4 * 4),
+            # Reshape(),
             _UpScale(1024, 512),
         )
 
